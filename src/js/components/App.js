@@ -14,11 +14,9 @@ function App() {
   });
 
   const addTask = task => {
-    const newTasks = tasks;
-    const id = tasks.length ? tasks[tasks.length - 1].id + 1 : 1;
-    newTasks.push(
-      Object.assign(task, { id, completed: false, createdAt: Date.now() })
-    );
+    const ts = Date.now();
+    setTasks([...tasks, { ...task, id: ts, createdAt: ts, completed: false }]);
+  };
 
     // TODO: Can/should this localStorage call live in a hook?
     // Ultimately this will POST to api.taravancil.com/tasks
