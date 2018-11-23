@@ -18,16 +18,20 @@ function App() {
     setTasks([...tasks, { ...task, id: ts, createdAt: ts, completed: false }]);
   };
 
-    // TODO: Can/should this localStorage call live in a hook?
-    // Ultimately this will POST to api.taravancil.com/tasks
-    localStorage.setItem("tasks", JSON.stringify(newTasks));
-    setTasks(newTasks);
+  const deleteTask = id => {
+    for (let i = 0; i < tasks.length; i++) {
+      if (tasks[i].id === id) {
+        tasks.splice(i, 1);
+        break;
+      }
+    }
+    setTasks(tasks);
   };
 
   return (
     <div className="container">
       <TaskCreator onAddTask={addTask} />
-      <TasksList tasks={tasks} />
+      <TasksList tasks={tasks} onDeleteTask={deleteTask} />
       <TaskCountLabel count={tasks ? tasks.length : 0} />
     </div>
   );

@@ -6,7 +6,13 @@ function TasksList(props) {
     return "Loading...";
   }
 
-  return <div className="tasks-list">{props.tasks.map(Task)}</div>;
+  return (
+    <div className="tasks-list">
+      {props.tasks.map(task => (
+        <Task key={task.id} {...task} onDelete={props.onDeleteTask} />
+      ))}
+    </div>
+  );
 }
 
 export default TasksList;
