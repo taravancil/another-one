@@ -1,7 +1,57 @@
+@font-face {
+  font-family: "Quattro";
+  src: url("/fonts/iAWriterQuattroS-Regular.woff2") format("woff2");
+  font-weight: 400;
+  // font-display: optional;
+}
+@font-face {
+  font-family: "Quattro";
+  src: url("/fonts/iAWriterQuattroS-Italic.woff2") format("woff2");
+  font-style: italic;
+  // font-display: optional;
+}
+@font-face {
+  font-family: "Quattro";
+  src: url("/fonts/iAWriterQuattroS-Bold.woff2") format("woff2");
+  font-weight: bold;
+  // font-display: optional;
+}
+
 html {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica,
     Arial, sans-serif;
-  font-size: 15px;
+  font-family: Quattro, Monaco, monospace;
+  font-size: 13.5px;
   line-height: 1.5;
   color: @text-color;
+}
+
+.large-text {
+  font-size: 18px;
+}
+
+.small-text {
+  font-size: 13px;
+}
+
+.tiny-text {
+  font-size: 11px;
+}
+
+.muted-text {
+  color: @text-color--muted;
+}
+
+.uppercase {
+  text-transform: uppercase;
+  letter-spacing: 0.25px;
+  font-size: inherit;
+}
+
+.italic {
+  font-style: italic;
+}
+
+.center {
+  text-align: center;
 }
