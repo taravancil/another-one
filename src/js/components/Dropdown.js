@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { findParent } from "../utils/dom";
 
 function Dropdown(props) {
+  const id = Date.now();
   const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
@@ -25,13 +26,13 @@ function Dropdown(props) {
   const click = e => {
     if (isOpen) {
       setIsOpen(false);
-    } else if (findParent(e.target, "dropdown-container")) {
+    } else if (findParent(e.target, `dropdown-container-${id}`)) {
       setIsOpen(true);
     }
   };
 
   return (
-    <div className="dropdown-container">
+    <div className={"dropdown-container dropdown-container-" + id}>
       {props.toggleButton}
       <div className="dropdown" hidden={isOpen ? "" : "hidden"}>
         {props.children}
