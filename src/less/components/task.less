@@ -1,0 +1,78 @@
+.tasks-list-info {
+  margin: 5px 0 0 0;
+}
+
+.empty-tasks-info {
+  margin: 20px 0 0 0;
+}
+
+.task {
+  width: 100%;
+  background: #fff;
+  justify-content: space-between;
+  margin: 0 0 10px 0;
+  padding: 15px 15px 0 15px;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+  box-shadow: 0 5px 5px 2px fadeout(#ddd, 70%);
+}
+
+.task-container {
+  width: 100%;
+  position: relative;
+}
+
+.task-header {
+  justify-content: flex-start;
+  margin: 0 0 5px 0;
+}
+
+.task-footer {
+  margin: 10px 0 0 0;
+  padding: 5px 0 5px 0;
+  border-top: 1px solid #ddd;
+}
+
+.task-status svg {
+  margin: 0 0 0 5px;
+}
+
+.task-title {
+  line-height: 1;
+}
+
+.task-notes {
+  margin: 10px 0 0 0;
+  font-style: italic;
+}
+
+.task-links {
+  margin: 10px 0 0 0;
+}
+
+.task--completed {
+  .task-title {
+    text-decoration: line-through;
+    font-weight: 400;
+  }
+
+  .task-title,
+  .task-notes {
+    &:extend(.muted-text);
+  }
+
+  .task-notes {
+    font-style: italic;
+  }
+}
+
+.task--collapsed {
+  .task-title {
+    margin: 0;
+  }
+
+  .task-links,
+  .task-notes {
+    display: none;
+  }
+}
