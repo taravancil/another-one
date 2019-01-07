@@ -87,6 +87,22 @@ function App() {
     setTasks(tasks);
   };
 
+  const toggleCompletedTask = id => {
+    for (let i = 0; i < tasks.length; i++) {
+      if (tasks[i].id === id) {
+        tasks[i].completed = !tasks[i].completed;
+
+        if (tasks[i].completed) {
+          tasks[i].completedAt = Date.now();
+        } else {
+          tasks[i].completedAt = null;
+        }
+        break;
+      }
+    }
+    setTasks(tasks);
+  };
+
   return (
     <>
       <header>
