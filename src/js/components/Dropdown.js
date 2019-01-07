@@ -34,7 +34,10 @@ function Dropdown(props) {
   return (
     <div className={"dropdown-container dropdown-container-" + id}>
       {props.toggleButton}
-      <div className="dropdown" hidden={isOpen ? "" : "hidden"}>
+      <div
+        className={"dropdown dropdown--" + props.direction || ""}
+        hidden={isOpen ? "" : "hidden"}
+      >
         {props.children}
       </div>
     </div>

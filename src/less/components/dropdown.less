@@ -5,16 +5,26 @@
 
 .dropdown {
   position: absolute;
-  width: 170px;
+  z-index: @on-top-index;
+  width: 180px;
   background: #fff;
-  border: 1px solid #ddd;
+  border: 1px solid #ccc;
   border-radius: 10px;
+  box-shadow: 0 5px 10px fadeout(#000, 90%);
 
   hr {
     border: 0;
-    border-top: 1px solid #ddd;
+    border-top: 1px solid #ccc;
     margin: 10px 0;
   }
+}
+
+.dropdown--left {
+  right: 0;
+}
+
+.dropdown-toggle-btn {
+  cursor: pointer;
 }
 
 .dropdown-items {
