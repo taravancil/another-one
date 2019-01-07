@@ -1,10 +1,14 @@
 import React, { useEffect, useState } from "react";
+import Modal from "./Modal";
+import LinksInput from "./LinksInput";
+import { findParent } from "../utils/dom";
 
 function TaskCreator(props) {
-  const [isCollapsed, setIsCollapsed] = useState(true);
+  const [isAddTaskModalOpen, setIsAddTaskModalOpen] = useState(null);
 
-  const initialTaskState = { title: "", notes: "" };
+  const initialTaskState = { title: "", notes: "", links: [] };
   const [task, setTask] = useState(initialTaskState);
+  const [formErrors, setFormErrors] = useState({});
 
   useEffect(() => {
     document.addEventListener("keyup", keyUp);
@@ -16,63 +20,76 @@ function TaskCreator(props) {
 
   const submit = e => {
     e.preventDefault();
-    props.onAddTask(task);
-    setTask(initialTaskState);
+
+    // TODO validate
+    if (!task.title) {
+      setFormErrors(Object.assign(formErrors, { title: "Enter a title" }));
+    } else {
+      props.onAddTask(task);
+      setTask(initialTaskState);
+      setIsAddTaskModalOpen(false);
+    }
   };
 
   const keyUp = e => {
-    // C-key
-    if (isCollapsed && e.keyCode === 67) {
-      setIsCollapsed(false);
-    }
-    // ESC-key
-    else if (e.keyCode === 27) {
-      setIsCollapsed(true);
-      setTask(initialTaskState);
+    // C-key press *not* inside of search input
+    if (
+      !findParent(e.target, "search") &&
+      !isAddTaskModalOpen &&
+      e.keyCode === 67
+    ) {
+      setIsAddTaskModalOpen(true);
     }
   };
 
+  const addTaskModalProps = {
+    title: "Add task",
+    visible: isAddTaskModalOpen,
+    close: () => setIsAddTaskModalOpen(false),
+    submit: submit,
+    submitLabel: "Add task"
+  };
+
   return (
-    <div className="task-creator">
-      <button className="btn" onClick={() => setIsCollapsed(!isCollapsed)}>
-        +
+    <>
+      <button
+        onClick={() => setIsAddTaskModalOpen(true)}
+        className={"btn " + props.buttonStyle}
+      >
+        {props.buttonLabel || "Add task"}
       </button>
 
-      <form className={isCollapsed ? "hidden" : ""} onSubmit={submit}>
-        <label htmlFor="task-title">Title</label>
-        <input
-          name="task-title"
-          type="text"
-          placeholder="feed the cat..."
-          value={task.title}
-          required
-          onChange={e =>
-            setTask(Object.assign(task, { title: e.target.value }))
-          }
-        />
+      <Modal {...addTaskModalProps}>
+        <div className="task-creator">
+          <form onSubmit={submit}>
+            <label htmlFor="task-title">Title</label>
+            <div className="input-feedback input-feedback--error tiny-text">
+              {formErrors.title || ""}
+            </div>
+            <input
+              name="task-title"
+              type="text"
+              value={task.title}
+              required
+              aria-invalid={formErrors.title ? true : false}
+              onChange={e =>
+                setTask(Object.assign(task, { title: e.target.value }))
+              }
+            />
 
-        <label htmlFor="task-notes">Notes</label>
-        <textarea
-          name="task-notes"
-          value={task.notes}
-          onChange={e =>
-            setTask(Object.assign(task, { notes: e.target.value }))
-          }
-        />
-
-        <button
-          type="reset"
-          className="btn"
-          onClick={() => setTask(initialTaskState)}
-        >
-          Reset
-        </button>
-
-        <button type="submit" className="btn btn--submit">
-          Add
-        </button>
-      </form>
-    </div>
+            <label htmlFor="task-notes">Notes</label>
+            <textarea
+              name="task-notes"
+              value={task.notes}
+              onChange={e =>
+                setTask(Object.assign(task, { notes: e.target.value }))
+              }
+            />
+            <LinksInput />
+          </form>
+        </div>
+      </Modal>
+    </>
   );
 }
 
