@@ -1,16 +1,94 @@
-.btn {
-  // reset
-  background: none;
-  outline: none;
-  font-size: inherit;
-  font-family: inherit;
-  border: 0;
-}
+@import "focus";
 
 .btn {
-  &:hover {
+  min-width: 60px;
+  height: 30px;
+  margin: 0 0 0 5px;
+  padding: 0 10px;
+  background: #fff;
+  color: @blue;
+  border: 1px solid;
+  border-radius: 10px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: 0.1s ease;
+
+  &:focus {
+    outline: none;
+    box-shadow: @box-shadow--btn-primary-focus;
+    border: 1px dotted #fff;
+  }
+
+  &:hover:not(:disabled) {
   }
 
   &:disabled {
+    cursor: default;
+    color: @text-color--muted;
+
+    &:hover {
+      color: @text-color--muted;
+      background: initial;
+    }
   }
+}
+
+.btn--primary {
+  background: @blue;
+  color: #fff;
+  border-color: darken(@blue, 7%);
+  font-weight: 600;
+  letter-spacing: 0.25px;
+
+  &:not(:disabled):hover {
+    background: darken(@blue, 7%);
+  }
+
+  &:disabled {
+    background: lighten(@blue, 10%);
+    border-color: lighten(@blue, 10%);
+    color: fadeout(#fff, 30%);
+  }
+}
+
+.btn--transparent {
+  min-width: initial;
+  background: none;
+  color: inherit;
+  border: 0;
+
+  &:hover {
+    background: fadeout(#000, 95%);
+  }
+}
+
+.btn--plain {
+  min-width: initial;
+  height: auto;
+  margin: 0;
+  padding: 0;
+  background: none;
+  border: 0;
+  border-radius: 0;
+
+  + .btn--plain {
+    margin: 0 0 0 10px;
+  }
+
+  &:not(:disabled):hover {
+    color: @link-color;
+    text-decoration: dotted underline;
+  }
+
+  &:not(:disabled):focus {
+    text-decoration: none;
+    outline: 1px dotted;
+    border: 0;
+    box-shadow: none;
+  }
+}
+
+.btn--full-width {
+  width: 100%;
+  margin: auto;
 }

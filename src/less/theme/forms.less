@@ -1,10 +1,121 @@
+@import "focus";
+
 label {
+  &:extend(.uppercase-heading);
+  display: block;
+  margin: 15px 0 5px 0px;
 }
 
-.text-input {
-  // reset
-  outline: none;
+input[type="text"],
+input[type="search"],
+input[type="password"],
+textarea {
+  &:extend(.small-text);
+  position: relative;
+  width: 100%;
+  height: 30px;
+  padding: 0 10px;
+  font-family: inherit;
+  border-radius: 10px;
+  border: 1px solid #ccc;
 
   &:focus {
+    outline: 0;
+    border: 1px solid @blue;
+    box-shadow: @box-shadow--input-focus;
   }
+
+  &[aria-invalid="invalid"],
+  &[aria-invalid="true"] {
+    box-shadow: none;
+    border-color: @red;
+
+    &:focus {
+      box-shadow: 0 0 5px fadeout(@red, 20%);
+    }
+  }
+
+  &.big-input {
+    height: 40px;
+  }
+}
+
+textarea {
+  height: 100px;
+  padding: 10px;
+}
+
+textarea:focus {
+  transform: scaleY(1);
+}
+
+.checkbox-label-container {
+  position: relative;
+  width: 20px;
+  height: 20px;
+  margin: 0;
+  border: 1px solid #ddd;
+  border-radius: 50%;
+  border-radius: 10px;
+  cursor: pointer;
+  // background: @blue;
+  // border: 1px solid @blue;
+
+  > * {
+    cursor: pointer;
+  }
+
+  &:hover {
+    border-color: #bbb;
+  }
+
+  svg {
+    transform: scale(0.4);
+    position: absolute;
+    left: -6.6px;
+    top: -7px;
+    z-index: 1;
+    line-height: 23px;
+  }
+
+  input {
+    position: absolute;
+    width: calc(100% + 45px);
+    height: calc(100% + 100px);
+    z-index: 3; // TODO use variable
+    opacity: 0;
+  }
+
+  &--checked {
+    border: 1px solid @green;
+    background: @green;
+
+    svg {
+      fill: #fff;
+      stroke: #fff;
+      stroke-width: 3px;
+    }
+
+    &:hover {
+      border-color: @green;
+    }
+  }
+}
+
+.checkbox-label-text {
+  opacity: 0;
+}
+
+.input-feedback {
+  position: relative;
+  z-index: @on-top-index;
+  height: 0;
+  text-align: right;
+  transform: translateY(7px);
+  padding: 0 10px 0 0;
+  font-weight: 500;
+}
+
+.input-feedback--error {
+  color: @red;
 }
