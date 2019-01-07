@@ -1,21 +1,80 @@
 import React, { useEffect, useState } from "react";
 import TasksList from "./TasksList";
+import Login from "./Login";
+import Search from "./Search";
 import TaskCreator from "./TaskCreator";
-import TaskCountLabel from "./TaskCountLabel";
+import useSession from "../hooks/session";
 
 function App() {
+  const session = useSession();
+
   const [tasks, setTasks] = useState(null);
   useEffect(() => {
     if (tasks === null) {
-      // Use localStorage until api.taravancil.com/tasks is ready
-      // TODO: Double check--is this is the recommended way to fetch data using hooks?
-      setTasks(JSON.parse(localStorage.getItem("tasks")));
+      if (session && session.name) {
+        // Use api.taravancil.com as tasks store
+        fetch("https://api.taravancil.com/tasks", {
+          credentials: "include"
+        })
+          .then(function(res) {
+            return res.json();
+          })
+          .then(function(data) {
+            setTasks(data);
+            setFilteredTasks(data);
+          })
+          .catch(function(err) {
+            setTasks([]);
+            setFilteredTasks([]);
+          });
+      } else {
+        // Use localStorage as tasks store
+        try {
+          const tasks = JSON.parse(localStorage.getItem("tasks"));
+        } catch (_) {
+          setTasks([]);
+          setFilteredTasks([]);
+        }
+      }
+    } else {
+      localStorage.setItem("tasks", JSON.stringify(tasks));
     }
   });
 
+  const [filteredTasks, setFilteredTasks] = useState([]);
+  const filterTasksByQuery = q => {
+    if (q.length) {
+      setFilteredTasks(
+        tasks.filter(t => t.title.toLowerCase().includes(q.toLowerCase()))
+      );
+    } else {
+      setFilteredTasks(tasks);
+    }
+  };
+
   const addTask = task => {
     const ts = Date.now();
-    setTasks([...tasks, { ...task, id: ts, createdAt: ts, completed: false }]);
+    task = {
+      ...task,
+      id: ts,
+      createdAt: ts.toString(),
+      completed: false
+    };
+
+    // update state tasks store
+    if (tasks) {
+      setTasks([...tasks, task]);
+    } else {
+      setTasks([task]);
+    }
+
+    // persist to tasks store
+    fetch("https://api.taravancil.com/tasks", {
+      method: "POST",
+      mode: "cors",
+      credentials: "include",
+      body: JSON.stringify({ ...task })
+    }).then(function(res) {});
   };
 
   const deleteTask = id => {
@@ -29,11 +88,31 @@ function App() {
   };
 
   return (
-    <div className="container">
-      <TaskCreator onAddTask={addTask} />
-      <TasksList tasks={tasks} onDeleteTask={deleteTask} />
-      <TaskCountLabel count={tasks ? tasks.length : 0} />
-    </div>
+    <>
+      <header>
+        <div className="flex container">
+          <Login />
+
+          <Search
+            autofocus={true}
+            onUpdateQuery={filterTasksByQuery}
+            delay={150}
+          />
+
+          <TaskCreator
+            onAddTask={addTask}
+            buttonStyle="btn--primary"
+            buttonLabel="Add task +"
+          />
+        </div>
+      </header>
+
+      <TasksList
+        tasks={filteredTasks}
+        onDeleteTask={deleteTask}
+        onToggleCompletedTask={toggleCompletedTask}
+      />
+    </>
   );
 }
 
